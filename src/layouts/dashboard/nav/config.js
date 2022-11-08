@@ -18,9 +18,14 @@ const navConfig = [
   },
   {
     title: 'NFTS',
-    path: '/dashboard/products',
+    path: '/dashboard/nfts',
     icon: icon('ic_nft'),
   },
+  {
+    title: 'NFTS Sales',
+    path: '/dashboard/nfts-sales',
+    icon: icon('ic_nft_sales'),
+  }
 ];
 
 export default navConfig;

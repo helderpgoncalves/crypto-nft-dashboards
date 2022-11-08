@@ -7,6 +7,7 @@ import CryptoPage from './pages/CryptoPage';
 import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
 import NftsPage from './pages/NftsPage';
+import NftsSalesPage from './pages/NftsSalesPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 
 // ----------------------------------------------------------------------
@@ -21,6 +22,7 @@ export default function Router() {
         { path: 'app', element: <DashboardAppPage /> },
         { path: 'crypto', element: <CryptoPage /> },
         { path: 'nfts', element: <NftsPage /> },
+        { path: 'nfts-sales', element: <NftsSalesPage /> },
       ],
     },
     {

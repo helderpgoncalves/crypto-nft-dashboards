@@ -28,13 +28,12 @@ import Scrollbar from '../components/scrollbar';
 export default function CryptoPage() {
   const [cryptosData, setCryptosData] = useState([]);
   const columns = [
-    { id: 'name', label: 'Name', minWidth: 170 },
-    { id: 'current_price', label: 'Current Price', minWidth: 100 },
+    { id: 'name', label: 'Name', align: 'left' },
+    { id: 'current_price', label: 'Current Price', align: 'left' },
     {
       id: 'market_cap',
       label: 'Market Cap',
-      minWidth: 170,
-      align: 'center',
+      align: 'left',
       format: (value) => value.toLocaleString('en-US'),
     },
     {
@@ -72,6 +71,22 @@ export default function CryptoPage() {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const descendingComparator = (a, b, orderBy) => {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+  };
+
+  const getComparator = (order, orderBy) => {
+    return order === 'desc'
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
   };
 
   const formatNumber = (num) => {
@@ -125,7 +140,12 @@ export default function CryptoPage() {
                 <TableHead>
                   <TableRow>
                     {columns.map((column) => (
-                      <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        style={{ minWidth: column.minWidth }}
+                        sx={{ py: 3 }}
+                      >
                         {column.label}
                       </TableCell>
                     ))}
@@ -134,70 +154,70 @@ export default function CryptoPage() {
                 <TableBody>
                   {cryptosData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     return (
-                    <TableRow hover key={row.id}>
-                      <TableCell>
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                          <Avatar alt={row.name} src={row.image} />
+                      <TableRow hover key={row.id}>
+                        <TableCell>
+                          <Stack direction="row" alignItems="center" spacing={2}>
+                            <Avatar alt={row.name} src={row.image} />
+                            <Typography variant="subtitle2" noWrap>
+                              {row.name}
+                            </Typography>
+                          </Stack>
+                        </TableCell>
+                        <TableCell>
                           <Typography variant="subtitle2" noWrap>
-                            {row.name}
+                            {row.current_price}
                           </Typography>
-                        </Stack>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="subtitle2" noWrap>
-                          {row.current_price}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="subtitle2" noWrap>
-                          {row.market_cap}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography
-                          variant="subtitle2"
-                          noWrap
-                          sx={{
-                            color: row.price_change_percentage_1h_in_currency > 0 ? 'success.main' : 'error.main',
-                          }}
-                        >
-                          {formatNumber(row.price_change_percentage_1h_in_currency)}%
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography
-                          variant="subtitle2"
-                          noWrap
-                          sx={{
-                            color: row.price_change_percentage_24h_in_currency > 0 ? 'success.main' : 'error.main',
-                          }}
-                        >
-                          {formatNumber(row.price_change_percentage_24h_in_currency)}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography
-                          variant="subtitle2"
-                          noWrap
-                          sx={{
-                            color: row.price_change_percentage_7d_in_currency > 0 ? 'success.main' : 'error.main',
-                          }}
-                        >
-                          {formatNumber(row.price_change_percentage_7d_in_currency)}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography
-                          variant="subtitle2"
-                          noWrap
-                          sx={{
-                            color: row.price_change_percentage_1y_in_currency > 0 ? 'success.main' : 'error.main',
-                          }}
-                        >
-                          {row.price_change_percentage_1y_in_currency}
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="subtitle2" noWrap>
+                            {row.market_cap}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography
+                            variant="subtitle2"
+                            noWrap
+                            sx={{
+                              color: row.price_change_percentage_1h_in_currency > 0 ? 'success.main' : 'error.main',
+                            }}
+                          >
+                            {formatNumber(row.price_change_percentage_1h_in_currency)}%
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography
+                            variant="subtitle2"
+                            noWrap
+                            sx={{
+                              color: row.price_change_percentage_24h_in_currency > 0 ? 'success.main' : 'error.main',
+                            }}
+                          >
+                            {formatNumber(row.price_change_percentage_24h_in_currency)}%
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography
+                            variant="subtitle2"
+                            noWrap
+                            sx={{
+                              color: row.price_change_percentage_7d_in_currency > 0 ? 'success.main' : 'error.main',
+                            }}
+                          >
+                            {formatNumber(row.price_change_percentage_7d_in_currency)}%
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography
+                            variant="subtitle2"
+                            noWrap
+                            sx={{
+                              color: row.price_change_percentage_1y_in_currency > 0 ? 'success.main' : 'error.main',
+                            }}
+                          >
+                            {formatNumber(row.price_change_percentage_1y_in_currency)}%
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
                     );
                   })}
                 </TableBody>
